@@ -2,8 +2,6 @@
 
 Guidance, KQL, and a staged playbook to discover and safely block **OAuth 2.0 Device Code Flow** phishing in Microsoft Entra ID — without breaking legitimate workflows.
 
-**Developer**: Dr Muataz Awad
-
 ## Contents
 
 - [Device-Code-Flow-Playbook.md](Device-Code-Flow-Playbook.md) — the full staged playbook (Discover → Classify → Simulate → Exclude → Enforce → Monitor & Automate).
@@ -44,3 +42,7 @@ Full step-by-step guidance is in [Device-Code-Flow-Playbook.md](Device-Code-Flow
 
 - This is guidance + detection content; it complements, and does not replace, native Entra protections.
 - Tune the KQL thresholds and country/risk filters to your tenant to reduce false positives.
+
+---
+
+**Developer**: Dr Muataz Awad
