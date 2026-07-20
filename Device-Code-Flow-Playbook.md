@@ -2,8 +2,6 @@
 
 A repeatable, low-risk process to discover, understand, and safely block **OAuth 2.0 Device Code Flow** abuse in Microsoft Entra ID — without breaking legitimate operational workflows.
 
-**Developer**: Dr Muataz Awad
-
 ---
 
 ## Why this matters
@@ -236,3 +234,7 @@ union isfuzzy=true SigninLogs, AADNonInteractiveUserSignInLogs
 ```
 
 Tune the country allow-list and risk thresholds to your tenant before turning it into an alert rule.
+
+---
+
+**Developer**: Dr Muataz Awad
