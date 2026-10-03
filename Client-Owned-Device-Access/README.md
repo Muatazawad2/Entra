@@ -1,22 +1,26 @@
-# Keep Microsoft 365 data off client-owned laptops
+# Keep Microsoft 365 data off devices you don't manage
+
+**Windows 365 Cloud PC + Conditional Access, with a browser-only fallback.**
 
 [![Windows 365](https://img.shields.io/badge/Windows_365-Cloud_PC-0078D4?logo=windows&logoColor=white)](https://learn.microsoft.com/en-us/windows-365/enterprise/requirements)
 [![Microsoft Entra](https://img.shields.io/badge/Microsoft_Entra-Conditional_Access-0078D4?logo=microsoft&logoColor=white)](https://learn.microsoft.com/en-us/windows-365/enterprise/set-conditional-access-policies)
 [![Microsoft Intune](https://img.shields.io/badge/Microsoft_Intune-settings_catalog-0062AD?logo=microsoft&logoColor=white)](https://learn.microsoft.com/en-us/windows-365/enterprise/manage-rdp-device-redirections)
 [![Defender for Cloud Apps](https://img.shields.io/badge/Defender_for_Cloud_Apps-session_policy-5C2D91?logo=microsoft&logoColor=white)](https://learn.microsoft.com/en-us/defender-cloud-apps/session-policy-aad)
 
-Some of your staff work at client sites on laptops that the **client** owns and manages. They still need your Microsoft 365 (Outlook, Teams, OneDrive and SharePoint), but you don't manage those laptops, so you can't trust them with your data.
+People often need your Microsoft 365 (Outlook, Teams, OneDrive and SharePoint) on devices that your organization doesn't manage: a client's or partner's laptop, a contractor's own computer, or a personal device. You can't control those devices, so you can't trust them with your data.
 
-This guide shows two tested ways to solve that, step by step, with screenshots:
+This guide shows two tested ways to give those people access while keeping your data off their devices, step by step, with screenshots:
 
-- **Option A: Windows 365 Cloud PC (recommended).** Each worker gets a Windows PC that runs in Microsoft's cloud and that *you* manage. The client laptop only shows the Cloud PC's screen. One Conditional Access rule blocks Microsoft 365 on every other device.
-- **Option B: Browser + Defender for Cloud Apps (fallback).** Workers use the client laptop's web browser, and Defender for Cloud Apps blocks downloads.
+- **Option A: Windows 365 Cloud PC (recommended).** Each worker gets a Windows PC that runs in Microsoft's cloud and that *you* manage. The device in front of them only shows the Cloud PC's screen. One Conditional Access rule blocks Microsoft 365 on every other device.
+- **Option B: Browser + Defender for Cloud Apps (fallback).** Workers use the device's web browser, and Defender for Cloud Apps blocks downloads.
+
+The worked example throughout this guide is a common case: staff who work at client sites on laptops that the client owns and manages. The same steps apply to any device you don't manage.
 
 <table>
 <tr><th width="50%">Option A: Windows 365 Cloud PC (recommended)</th><th width="50%">Option B: Browser + Defender for Cloud Apps</th></tr>
 <tr>
 <td valign="top">Your data stays inside the Cloud PC. Workers get a normal Windows desktop. You need one Conditional Access rule and one Intune policy. <a href="#option-a-step-by-step">Go to the steps</a>.</td>
-<td valign="top">Your data is shown on the client laptop, but downloads are blocked. Workers see a proxy address or a prompt to add a work profile. <a href="#option-b-step-by-step">Go to the steps</a>.</td>
+<td valign="top">Your data is shown on the unmanaged device, but downloads are blocked. Workers see a proxy address or a prompt to add a work profile. <a href="#option-b-step-by-step">Go to the steps</a>.</td>
 </tr>
 <tr>
 <td align="center"><img src="docs/images/option-a-cloud-pc-diagram.png" alt="Option A diagram" width="420"></td>
@@ -48,7 +52,7 @@ This guide shows two tested ways to solve that, step by step, with screenshots:
 
 ## The problem
 
-Contoso (a placeholder company name) places staff at client sites. Those staff use laptops that belong to the client and are managed by the client's IT team. The staff need Contoso's Outlook, Teams, OneDrive and SharePoint. Contoso has two goals:
+This guide uses one scenario as its worked example. Contoso (a placeholder company name) places staff at client sites. Those staff use laptops that belong to the client and are managed by the client's IT team. The staff need Contoso's Outlook, Teams, OneDrive and SharePoint. Contoso has two goals:
 
 1. Keep Contoso data **off** devices that Contoso doesn't manage, including client laptops and personal devices.
 2. Still let the staff do their jobs from the client laptop.
@@ -63,6 +67,9 @@ The obvious fixes don't work:
 
 <p align="center"><img src="docs/images/mdca-monitored-notice.png" alt="Access to Microsoft OneDrive for Business is monitored" width="560"><br><sub>Browser session control on an unmanaged laptop: OneDrive is routed through the Defender for Cloud Apps proxy, with a "monitored" notice.</sub></p>
 
+> [!TIP]
+> If the devices are personal ones that no organization manages, also consider [Intune app protection for Windows](https://learn.microsoft.com/en-us/intune/intune-service/apps/protect-mam-windows). It protects work data inside Microsoft Edge without enrolling the device. Options A and B work whether or not another organization manages the device.
+
 ## Key terms
 
 New to these products? Here's what each term means in this guide.
@@ -72,7 +79,7 @@ New to these products? Here's what each term means in this guide.
 | **Microsoft Entra ID** | Microsoft's cloud identity service (formerly Azure Active Directory). It's where your users sign in. You manage it in the [Microsoft Entra admin center](https://entra.microsoft.com). |
 | **Conditional Access** | Rules in Entra ID that check every sign-in: who is signing in, to which app, from which device and from where. A rule can allow the sign-in, block it, or add a requirement. |
 | **Microsoft Intune** | Microsoft's device management service. A device that is *enrolled* in Intune is managed by your organization. You manage it in the [Intune admin center](https://intune.microsoft.com). |
-| **Compliant device** | A device that your Intune manages and that meets your Intune rules. Conditional Access can require one. A client-owned laptop can never be compliant for you, because you don't manage it. |
+| **Compliant device** | A device that your Intune manages and that meets your Intune rules. Conditional Access can require one. A device you don't manage, such as a client-owned laptop, can never be compliant for you. |
 | **Windows 365 and Cloud PC** | Windows 365 is a service that gives each licensed user a **Cloud PC**: a full Windows 11 PC that runs in Microsoft's cloud. It's joined to your Entra ID and managed by your Intune. |
 | **Windows App** | The app, or the website [windows.cloud.microsoft](https://windows.cloud.microsoft), that workers use to open their Cloud PC. Only a picture of the screen reaches the laptop. |
 | **Provisioning policy** | An Intune setting that tells Windows 365 how to build Cloud PCs (Windows image, network, region) and who gets one. |
@@ -549,6 +556,7 @@ The screenshots come from a lab tenant, with names and identifiers redacted. *Co
 - [Named locations (network conditions)](https://learn.microsoft.com/en-us/entra/identity/conditional-access/location-condition)
 - [Create session policies in Defender for Cloud Apps](https://learn.microsoft.com/en-us/defender-cloud-apps/session-policy-aad)
 - [Control access from unmanaged devices in SharePoint](https://learn.microsoft.com/en-us/sharepoint/control-access-from-unmanaged-devices)
+- [Intune app protection for Windows (personal devices)](https://learn.microsoft.com/en-us/intune/intune-service/apps/protect-mam-windows)
 
 ---
 
