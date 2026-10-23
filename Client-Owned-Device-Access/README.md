@@ -561,3 +561,7 @@ The screenshots come from a lab tenant, with names and identifiers redacted. *Co
 ---
 
 **Developer**: Dr Muataz Awad
+
+---
+
+*Personal project — not an official Microsoft product. [Full disclaimer](../README.md#disclaimer).*

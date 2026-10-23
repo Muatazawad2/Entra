@@ -310,3 +310,7 @@ Once you understand how it's built, you don't have to build it this way every ti
 ---
 
 **Author**: Dr. Muataz Awad
+
+---
+
+*Personal project — not an official Microsoft product. [Full disclaimer](../README.md#disclaimer).*
